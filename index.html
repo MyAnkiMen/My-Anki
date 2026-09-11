@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#536dfe">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="MyAnki">
+  <title>MyAnki</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <button class="brand" type="button" data-screen="home">MyAnki</button>
+    <nav aria-label="メインメニュー">
+      <button type="button" data-screen="home">Home</button>
+      <button type="button" data-screen="study">Study</button>
+      <button type="button" data-screen="manage">Cards</button>
+      <button type="button" data-screen="import">Import</button>
+    </nav>
+  </header>
+  <main class="shell">
+    <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+    <section id="home-screen" class="screen active" aria-labelledby="home-title">
+      <div class="hero">
+        <p class="eyebrow">TODAY</p><h1 id="home-title">今日も少しずつ</h1>
+        <div class="due-count"><strong id="due-count">0</strong><span>枚の復習</span></div>
+        <button id="start-study" class="primary large" type="button">学習を始める</button>
+      </div>
+      <div class="home-actions">
+        <button type="button" data-screen="manage"><strong>カード追加・管理</strong><span>PCで教材を編集</span></button>
+        <button type="button" data-screen="import"><strong>カードをインポート</strong><span>JSONから取り込む</span></button>
+        <button id="backup-button" type="button"><strong>全データをバックアップ</strong><span>教材と学習履歴を保存</span></button>
+      </div>
+    </section>
+    <section id="study-screen" class="screen" aria-labelledby="study-title">
+      <div class="section-heading"><div><p class="eyebrow">STUDY</p><h1 id="study-title">今日の復習</h1></div><p>残り <strong id="remaining-count">0</strong> 枚</p></div>
+      <div id="study-empty" class="empty-state" hidden><h2>今日の学習は完了です</h2><p>復習するカードはありません。</p><button class="secondary" type="button" data-screen="home">ホームへ戻る</button></div>
+      <div id="study-area">
+        <button id="word-card" class="word-card" type="button" aria-label="押すと答えを表示します">
+          <span id="card-front" class="card-front">prospective</span>
+          <span id="card-answer" class="card-answer" hidden><span id="card-back"></span><small id="card-example"></small></span>
+        </button>
+        <button id="show-answer" class="primary answer-button" type="button">答えを見る</button>
+        <div id="rating-buttons" class="rating-buttons" aria-label="学習結果" hidden>
+          <button class="rating-button forgotten" type="button" data-rating="forgotten">忘れた</button>
+          <button class="rating-button unsure" type="button" data-rating="unsure">微妙</button>
+          <button class="rating-button remembered" type="button" data-rating="remembered">覚えた</button>
+        </div>
+      </div>
+    </section>
+    <section id="manage-screen" class="screen" aria-labelledby="manage-title">
+      <div class="section-heading"><div><p class="eyebrow">CARD MANAGEMENT</p><h1 id="manage-title">カード管理</h1></div></div>
+      <div class="management-layout">
+        <form id="card-form" class="panel">
+          <h2 id="form-title">新しいカード</h2><input id="card-id" type="hidden">
+          <label>Front <input id="front" required autocomplete="off"></label>
+          <label>Back <textarea id="back" required rows="3"></textarea></label>
+          <label>Example <textarea id="example" rows="3"></textarea></label>
+          <label>Tags <input id="tags" placeholder="例: TOEIC, adjective"></label>
+          <label>Source <input id="source" placeholder="例: TOEIC Part 7, ChatGPT"></label>
+          <div class="form-actions"><button class="primary" type="submit">保存する</button><button id="cancel-edit" class="secondary" type="button" hidden>編集をやめる</button></div>
+        </form>
+        <div class="panel card-list-panel">
+          <div class="list-header">
+            <h2>作成済みカード</h2>
+            <div class="list-tools">
+              <label class="compact-label">表示
+                <select id="card-filter"><option value="all">すべて</option><option value="mastered">定着済み</option></select>
+              </label>
+              <button id="export-cards" class="secondary" type="button">JSONを書き出す</button>
+            </div>
+          </div>
+          <div id="card-list" class="card-list"></div>
+        </div>
+      </div>
+    </section>
+    <section id="import-screen" class="screen" aria-labelledby="import-title">
+      <div class="section-heading"><div><p class="eyebrow">IMPORT</p><h1 id="import-title">カードをインポート</h1></div></div>
+      <div class="panel import-panel"><p>PCで書き出したカードJSONを選択してください。既存カードの学習履歴は保持されます。</p><label class="file-picker">JSONファイルを選択<input id="import-file" type="file" accept="application/json,.json"></label><div id="import-result" class="import-result" aria-live="polite"></div></div>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
